@@ -1,5 +1,6 @@
 "use client";
 
+import type { FormEvent, ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -453,7 +454,7 @@ export function VTalkExperience() {
     }
   }
 
-  async function submitAuthForm(event: React.FormEvent<HTMLFormElement>) {
+  async function submitAuthForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
       const endpoint =
@@ -828,278 +829,284 @@ export function VTalkExperience() {
         {!isMobileViewport ? (
           <div className="desktop-workspace">
             <section className="desktop-hero">
-            <div className="desktop-hero-copy">
-              <span className="card-label">Realtime Sign Language Platform</span>
-              <h2>Belajar, memantau, dan menerjemahkan bahasa isyarat dalam satu workspace desktop.</h2>
-              <p>
-                Tampilan desktop ini menyatukan lesson progress, status backend, sesi kamera real-time,
-                transcript, dan feedback agar lebih nyaman dipakai untuk demo, evaluasi, dan integrasi.
-              </p>
-              <div className="desktop-hero-actions">
-                <button className="desktop-primary" type="button" onClick={startCamera}>
-                  {isCameraActive ? "Kamera Aktif" : "Mulai Kamera"}
-                </button>
-                <button
-                  className="desktop-secondary"
-                  type="button"
-                  onClick={isSessionRunning ? () => stopSession("Sesi dihentikan.") : startSession}
-                >
-                  {isSessionRunning ? "Hentikan Translasi" : "Mulai Translasi"}
-                </button>
-                <button className="desktop-secondary" type="button" onClick={() => setIsSettingsOpen(true)}>
-                  Pengaturan
-                </button>
+              <div className="desktop-hero-copy">
+                <span className="card-label">Realtime Sign Language Platform</span>
+                <h2>Belajar, memantau, dan menerjemahkan bahasa isyarat dalam satu workspace desktop.</h2>
+                <p>
+                  Tampilan desktop ini menyatukan lesson progress, status backend, sesi kamera real-time,
+                  transcript, dan feedback agar lebih nyaman dipakai untuk demo, evaluasi, dan integrasi.
+                </p>
+                <div className="desktop-hero-actions">
+                  <button className="desktop-primary" type="button" onClick={startCamera}>
+                    {isCameraActive ? "Kamera Aktif" : "Mulai Kamera"}
+                  </button>
+                  <button
+                    className="desktop-secondary"
+                    type="button"
+                    onClick={isSessionRunning ? () => stopSession("Sesi dihentikan.") : startSession}
+                  >
+                    {isSessionRunning ? "Hentikan Translasi" : "Mulai Translasi"}
+                  </button>
+                  <button className="desktop-secondary" type="button" onClick={() => setIsSettingsOpen(true)}>
+                    Pengaturan
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div className="desktop-hero-side">
-              <div className="desktop-quick-card desktop-quick-card--lesson">
-                <div className="desktop-quick-head">
-                  <span className="card-label">Continue Lessons</span>
-                  <span className="desktop-chip">75%</span>
+              <div className="desktop-hero-side">
+                <div className="desktop-quick-card desktop-quick-card--lesson">
+                  <div className="desktop-quick-head">
+                    <span className="card-label">Continue Lessons</span>
+                    <span className="desktop-chip">75%</span>
+                  </div>
+                  <div className="desktop-lesson-icon">ILY</div>
+                  <strong>Common Words</strong>
+                  <p>Latihan ekspresi dasar untuk komunikasi harian yang inklusif.</p>
                 </div>
-                <div className="desktop-lesson-icon">ILY</div>
-                <strong>Common Words</strong>
-                <p>Latihan ekspresi dasar untuk komunikasi harian yang inklusif.</p>
+
+                <div className="desktop-quick-card desktop-quick-card--status">
+                  <div className="desktop-status-list">
+                    <StatusPill status={healthStatus} />
+                    <StatusPill status={transportStatus} />
+                  </div>
+                  <div className="desktop-auth-inline">
+                    <strong>{auth?.user.full_name ?? "Guest Mode"}</strong>
+                    <span>{auth?.user.email ?? "Login opsional untuk sesi pengguna"}</span>
+                  </div>
+                  <button
+                    className="ghost-action ghost-action--dark"
+                    type="button"
+                    onClick={() => setIsAuthOpen(true)}
+                  >
+                    {auth ? "Kelola Session" : "Login / Register"}
+                  </button>
+                </div>
               </div>
-              <div className="desktop-quick-card desktop-quick-card--status">
-                <div className="desktop-status-list">
-                  <StatusPill status={healthStatus} />
-                  <StatusPill status={transportStatus} />
-                </div>
-                <div className="desktop-auth-inline">
-                  <strong>{auth?.user.full_name ?? "Guest Mode"}</strong>
-                  <span>{auth?.user.email ?? "Login opsional untuk sesi pengguna"}</span>
-                </div>
-                <button className="ghost-action ghost-action--dark" type="button" onClick={() => setIsAuthOpen(true)}>
-                  {auth ? "Kelola Session" : "Login / Register"}
-                </button>
-              </div>
-            </div>
-          </section>
+            </section>
 
             <section className="desktop-grid">
-            <article className="desktop-panel desktop-panel--camera">
-              <div className="desktop-panel-head">
-                <div>
-                  <span className="card-label">Interpreter</span>
-                  <h3>Live Camera Translation</h3>
-                </div>
-                <div className="desktop-head-actions">
-                  <button className="icon-bubble" type="button" onClick={isCameraActive ? stopCamera : startCamera}>
-                    {isCameraActive ? <Video size={15} /> : <Camera size={15} />}
-                  </button>
-                  <button className="icon-bubble" type="button" onClick={() => setIsSettingsOpen(true)}>
-                    <Settings size={15} />
-                  </button>
-                </div>
-              </div>
-
-              <div className="desktop-camera-shell">
-                <div className="desktop-camera-stage">
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    muted
-                    playsInline
-                    className={config.mirrorCamera ? "camera-video camera-video--mirror" : "camera-video"}
-                  />
-                  <canvas ref={canvasRef} className="hidden-canvas" />
-                  <div className="camera-fallback" aria-hidden="true" />
-                  <div className="camera-corners" aria-hidden="true">
-                    <span />
-                    <span />
+              <article className="desktop-panel desktop-panel--camera">
+                <div className="desktop-panel-head">
+                  <div>
+                    <span className="card-label">Interpreter</span>
+                    <h3>Live Camera Translation</h3>
                   </div>
-                </div>
-
-                <div className="desktop-camera-insight">
-                  <div className="desktop-metric">
-                    <span className="card-label">Interpreting</span>
-                    <strong>{lastTranslation?.predicted_text ?? "-"}</strong>
-                    <p>{cameraHint}</p>
-                  </div>
-                  <div className="desktop-metric">
-                    <span className="card-label">Confidence</span>
-                    <strong>{confidencePercent}%</strong>
-                    <div className="confidence-bar">
-                      <div
-                        className="confidence-bar-fill"
-                        style={{ width: `${confidencePercent}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div className="desktop-inline-meta">
-                    <span>{currentModeLabel}</span>
-                    <span>{lastTranslation?.request_id ?? "Belum ada request"}</span>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <article className="desktop-panel desktop-panel--sidebar">
-              <div className="desktop-panel-head">
-                <div>
-                  <span className="card-label">Session Controls</span>
-                  <h3>Workspace Settings</h3>
-                </div>
-              </div>
-
-              <div className="desktop-controls">
-                <div className="desktop-field">
-                  <span>Backend URL</span>
-                  <input
-                    value={config.backendUrl}
-                    onChange={(event) => updateConfig("backendUrl", event.target.value)}
-                    placeholder="http://127.0.0.1:8000"
-                  />
-                </div>
-
-                <div className="desktop-field">
-                  <span>Mode Transport</span>
-                  <div className="segmented">
+                  <div className="desktop-head-actions">
                     <button
+                      className="icon-bubble"
                       type="button"
-                      className={config.transportMode === "websocket" ? "segmented--active" : ""}
-                      onClick={() => updateConfig("transportMode", "websocket")}
+                      onClick={isCameraActive ? stopCamera : startCamera}
                     >
-                      WebSocket
+                      {isCameraActive ? <Video size={15} /> : <Camera size={15} />}
                     </button>
-                    <button
-                      type="button"
-                      className={config.transportMode === "rest" ? "segmented--active" : ""}
-                      onClick={() => updateConfig("transportMode", "rest")}
-                    >
-                      REST
+                    <button className="icon-bubble" type="button" onClick={() => setIsSettingsOpen(true)}>
+                      <Settings size={15} />
                     </button>
                   </div>
                 </div>
 
-                <div className="desktop-field">
-                  <span>Interval Frame ({config.frameInterval} ms)</span>
-                  <input
-                    type="range"
-                    min={300}
-                    max={1200}
-                    step={50}
-                    value={config.frameInterval}
-                    onChange={(event) => updateConfig("frameInterval", Number(event.target.value))}
-                  />
-                </div>
-
-                <div className="desktop-field">
-                  <span>Kualitas JPEG ({config.jpegQuality}%)</span>
-                  <input
-                    type="range"
-                    min={50}
-                    max={95}
-                    step={1}
-                    value={config.jpegQuality}
-                    onChange={(event) => updateConfig("jpegQuality", Number(event.target.value))}
-                  />
-                </div>
-
-                <label className="check-row">
-                  <input
-                    type="checkbox"
-                    checked={config.mirrorCamera}
-                    onChange={(event) => updateConfig("mirrorCamera", event.target.checked)}
-                  />
-                  <span>Mirror preview kamera</span>
-                </label>
-              </div>
-            </article>
-
-            <article className="desktop-panel desktop-panel--lessons">
-              <div className="desktop-panel-head">
-                <div>
-                  <span className="card-label">Daily Learning</span>
-                  <h3>Tracker & Lesson Cards</h3>
-                </div>
-              </div>
-
-              <div className="tracker-grid tracker-grid--desktop">
-                {WEEK_TRACKER.map((item) => (
-                  <div key={item.day} className={`tracker-cell ${item.done ? "tracker-cell--done" : ""}`}>
-                    <span>{item.day}</span>
-                    {item.done ? <Check size={12} /> : <Circle size={10} />}
-                  </div>
-                ))}
-              </div>
-
-              <div className="desktop-lesson-grid">
-                {LESSON_CARDS.map((card) => (
-                  <button key={card.title} type="button" className={`lesson-card ${card.accent}`}>
-                    <span className="lesson-card-glyph">{card.glyph}</span>
-                    <strong>{card.title}</strong>
-                  </button>
-                ))}
-              </div>
-            </article>
-
-            <article className="desktop-panel desktop-panel--transcript">
-              <div className="desktop-panel-head">
-                <div>
-                  <span className="card-label">History & Feedback</span>
-                  <h3>Transcript Session</h3>
-                </div>
-                <button className="link-button" type="button" onClick={clearSessionData}>
-                  Clear
-                </button>
-              </div>
-
-              <div className="desktop-transcript">
-                {transcript.length ? transcript.join(" ") : "Belum ada hasil translasi."}
-              </div>
-
-              <textarea
-                value={feedbackNote}
-                onChange={(event) => setFeedbackNote(event.target.value)}
-                placeholder="Tambahkan catatan singkat untuk feedback."
-                className="feedback-textarea"
-              />
-
-              <div className="feedback-actions">
-                <button
-                  className="tag-button"
-                  type="button"
-                  disabled={!isFeedbackReady}
-                  onClick={() => void submitFeedback("correct")}
-                >
-                  Akurat
-                </button>
-                <button
-                  className="tag-button"
-                  type="button"
-                  disabled={!isFeedbackReady}
-                  onClick={() => void submitFeedback("incorrect")}
-                >
-                  Koreksi
-                </button>
-                <button
-                  className="tag-button"
-                  type="button"
-                  disabled={!isFeedbackReady}
-                  onClick={() => void submitFeedback("uncertain")}
-                >
-                  Belum yakin
-                </button>
-              </div>
-
-              <div className="desktop-history-list">
-                {history.length ? (
-                  history.map((entry) => (
-                    <div key={entry.request_id} className="history-item">
-                      <strong>{entry.predicted_text}</strong>
-                      <span>{Math.round(entry.confidence * 100)}%</span>
-                      <span>{formatTime(entry.created_at)}</span>
+                <div className="desktop-camera-shell">
+                  <div className="desktop-camera-stage">
+                    <video
+                      ref={videoRef}
+                      autoPlay
+                      muted
+                      playsInline
+                      className={config.mirrorCamera ? "camera-video camera-video--mirror" : "camera-video"}
+                    />
+                    <canvas ref={canvasRef} className="hidden-canvas" />
+                    <div className="camera-fallback" aria-hidden="true" />
+                    <div className="camera-corners" aria-hidden="true">
+                      <span />
+                      <span />
                     </div>
-                  ))
-                ) : (
-                  <div className="history-empty">Riwayat prediksi akan muncul di sini.</div>
-                )}
-              </div>
-            </article>
-          </section>
+                  </div>
+
+                  <div className="desktop-camera-insight">
+                    <div className="desktop-metric">
+                      <span className="card-label">Interpreting</span>
+                      <strong>{lastTranslation?.predicted_text ?? "-"}</strong>
+                      <p>{cameraHint}</p>
+                    </div>
+                    <div className="desktop-metric">
+                      <span className="card-label">Confidence</span>
+                      <strong>{confidencePercent}%</strong>
+                      <div className="confidence-bar">
+                        <div className="confidence-bar-fill" style={{ width: `${confidencePercent}%` }} />
+                      </div>
+                    </div>
+                    <div className="desktop-inline-meta">
+                      <span>{currentModeLabel}</span>
+                      <span>{lastTranslation?.request_id ?? "Belum ada request"}</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article className="desktop-panel desktop-panel--sidebar">
+                <div className="desktop-panel-head">
+                  <div>
+                    <span className="card-label">Session Controls</span>
+                    <h3>Workspace Settings</h3>
+                  </div>
+                </div>
+
+                <div className="desktop-controls">
+                  <div className="desktop-field">
+                    <span>Backend URL</span>
+                    <input
+                      value={config.backendUrl}
+                      onChange={(event) => updateConfig("backendUrl", event.target.value)}
+                      placeholder="http://127.0.0.1:8000"
+                    />
+                  </div>
+
+                  <div className="desktop-field">
+                    <span>Mode Transport</span>
+                    <div className="segmented">
+                      <button
+                        type="button"
+                        className={config.transportMode === "websocket" ? "segmented--active" : ""}
+                        onClick={() => updateConfig("transportMode", "websocket")}
+                      >
+                        WebSocket
+                      </button>
+                      <button
+                        type="button"
+                        className={config.transportMode === "rest" ? "segmented--active" : ""}
+                        onClick={() => updateConfig("transportMode", "rest")}
+                      >
+                        REST
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="desktop-field">
+                    <span>Interval Frame ({config.frameInterval} ms)</span>
+                    <input
+                      type="range"
+                      min={300}
+                      max={1200}
+                      step={50}
+                      value={config.frameInterval}
+                      onChange={(event) => updateConfig("frameInterval", Number(event.target.value))}
+                    />
+                  </div>
+
+                  <div className="desktop-field">
+                    <span>Kualitas JPEG ({config.jpegQuality}%)</span>
+                    <input
+                      type="range"
+                      min={50}
+                      max={95}
+                      step={1}
+                      value={config.jpegQuality}
+                      onChange={(event) => updateConfig("jpegQuality", Number(event.target.value))}
+                    />
+                  </div>
+
+                  <label className="check-row">
+                    <input
+                      type="checkbox"
+                      checked={config.mirrorCamera}
+                      onChange={(event) => updateConfig("mirrorCamera", event.target.checked)}
+                    />
+                    <span>Mirror preview kamera</span>
+                  </label>
+                </div>
+              </article>
+
+              <article className="desktop-panel desktop-panel--lessons">
+                <div className="desktop-panel-head">
+                  <div>
+                    <span className="card-label">Daily Learning</span>
+                    <h3>Tracker & Lesson Cards</h3>
+                  </div>
+                </div>
+
+                <div className="tracker-grid tracker-grid--desktop">
+                  {WEEK_TRACKER.map((item) => (
+                    <div key={item.day} className={`tracker-cell ${item.done ? "tracker-cell--done" : ""}`}>
+                      <span>{item.day}</span>
+                      {item.done ? <Check size={12} /> : <Circle size={10} />}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="desktop-lesson-grid">
+                  {LESSON_CARDS.map((card) => (
+                    <button key={card.title} type="button" className={`lesson-card ${card.accent}`}>
+                      <span className="lesson-card-glyph">{card.glyph}</span>
+                      <strong>{card.title}</strong>
+                    </button>
+                  ))}
+                </div>
+              </article>
+
+              <article className="desktop-panel desktop-panel--transcript">
+                <div className="desktop-panel-head">
+                  <div>
+                    <span className="card-label">History & Feedback</span>
+                    <h3>Transcript Session</h3>
+                  </div>
+                  <button className="link-button" type="button" onClick={clearSessionData}>
+                    Clear
+                  </button>
+                </div>
+
+                <div className="desktop-transcript">
+                  {transcript.length ? transcript.join(" ") : "Belum ada hasil translasi."}
+                </div>
+
+                <textarea
+                  value={feedbackNote}
+                  onChange={(event) => setFeedbackNote(event.target.value)}
+                  placeholder="Tambahkan catatan singkat untuk feedback."
+                  className="feedback-textarea"
+                />
+
+                <div className="feedback-actions">
+                  <button
+                    className="tag-button"
+                    type="button"
+                    disabled={!isFeedbackReady}
+                    onClick={() => void submitFeedback("correct")}
+                  >
+                    Akurat
+                  </button>
+                  <button
+                    className="tag-button"
+                    type="button"
+                    disabled={!isFeedbackReady}
+                    onClick={() => void submitFeedback("incorrect")}
+                  >
+                    Koreksi
+                  </button>
+                  <button
+                    className="tag-button"
+                    type="button"
+                    disabled={!isFeedbackReady}
+                    onClick={() => void submitFeedback("uncertain")}
+                  >
+                    Belum yakin
+                  </button>
+                </div>
+
+                <div className="desktop-history-list">
+                  {history.length ? (
+                    history.map((entry) => (
+                      <div key={entry.request_id} className="history-item">
+                        <strong>{entry.predicted_text}</strong>
+                        <span>{Math.round(entry.confidence * 100)}%</span>
+                        <span>{formatTime(entry.created_at)}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="history-empty">Riwayat prediksi akan muncul di sini.</div>
+                  )}
+                </div>
+              </article>
+            </section>
           </div>
         ) : (
           <div className="phone-showcase phone-showcase--mobile">
@@ -1268,7 +1275,7 @@ function PhoneFrame({
   className,
   title,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   title: string;
 }) {
@@ -1331,7 +1338,7 @@ function Modal({
   title,
   onClose,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   title: string;
   onClose: () => void;
 }) {
@@ -1374,14 +1381,15 @@ function writeStorage<T>(key: string, value: T) {
 }
 
 function buildJsonHeaders(token?: string) {
-  return token
-    ? {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    : {
-        "Content-Type": "application/json",
-      };
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
 }
 
 function normalizeBaseUrl(value: string) {
