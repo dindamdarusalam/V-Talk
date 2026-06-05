@@ -1,0 +1,27 @@
+{
+  "name": "V-Talk",
+  "short_name": "V-Talk",
+  "description": "Edukasi bahasa isyarat: menjembatani komunikasi serta mewujudkan kesetaraan.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#5f6fe9",
+  "theme_color": "#5f6fe9",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: vtalk-backend
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_NAME
+        value: V-Talk Backend
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+      - key: DATABASE_POOL_SIZE
+        value: "5"
+      - key: DATABASE_MAX_OVERFLOW
+        value: "5"
+      - key: DATABASE_POOL_TIMEOUT
+        value: "30"
+      - key: DATABASE_POOL_RECYCLE_SECONDS
+        value: "1800"
+      - key: INFERENCE_PROVIDER
+        value: mock
+      - key: MODEL_LABELS
+        value: A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z
+      - key: SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: DEFAULT_USER_EMAIL
+        value: demo@vtalk.example.com
+      - key: DEFAULT_USER_PASSWORD
+        sync: false
